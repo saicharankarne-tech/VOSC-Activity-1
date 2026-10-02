@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ludo Classic - VOSC Activity-1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="game-header">
+      <div class="brand">
+        <span class="brand-badge">VOSC Activity-1</span>
+        <h1>🎲 LUDO CLASSIC</h1>
+      </div>
+
+      <div class="top-controls">
+        <div class="control-group">
+          <label for="playerCountSelect">Players:</label>
+          <select id="playerCountSelect" title="Select number of players">
+            <option value="2">2 Players (Red vs Yellow)</option>
+            <option value="3">3 Players (Red, Green, Yellow)</option>
+            <option value="4" selected>4 Players (All Colors)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="pawnCountSelect">Pawns:</label>
+          <select id="pawnCountSelect" title="Select pawns per player">
+            <option value="2">2 Pawns (Fast)</option>
+            <option value="4" selected>4 Pawns (Classic)</option>
+          </select>
+        </div>
+
+        <button id="btnNewGame" class="btn btn-primary" title="Start a fresh game">
+          🔄 New Game
+        </button>
+        <button id="btnSoundToggle" class="btn btn-icon" title="Toggle Sound">
+          🔊
+        </button>
+        <button id="btnRules" class="btn btn-secondary" title="View Game Rules">
+          📖 Rules
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Game Board & Side Panels -->
+    <main class="game-layout">
+      <!-- Left Player Panel -->
+      <aside class="players-panel left-panel">
+        <div class="player-card" id="card-red" data-color="red">
+          <div class="player-header">
+            <span class="color-dot red-dot"></span>
+            <span class="player-name">Red</span>
+            <button class="ai-toggle-btn" id="ai-toggle-red" title="Toggle AI / Human">👤 Human</button>
+          </div>
+          <div class="pawn-status">
+            <span>Yard: <b id="stat-red-yard">4</b></span>
+            <span>Track: <b id="stat-red-track">0</b></span>
+            <span>Home: <b id="stat-red-home">0</b></span>
+          </div>
+        </div>
+
+        <div class="player-card" id="card-blue" data-color="blue">
+          <div class="player-header">
+            <span class="color-dot blue-dot"></span>
+            <span class="player-name">Blue</span>
+            <button class="ai-toggle-btn" id="ai-toggle-blue" title="Toggle AI / Human">🤖 Bot</button>
+          </div>
+          <div class="pawn-status">
+            <span>Yard: <b id="stat-blue-yard">4</b></span>
+            <span>Track: <b id="stat-blue-track">0</b></span>
+            <span>Home: <b id="stat-blue-home">0</b></span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Board Wrapper -->
+      <section class="board-wrapper">
+        <div class="ludo-board" id="ludoBoard" aria-label="Ludo Game Board">
+          <!-- The 15x15 board cells and yards are dynamically rendered or built via HTML -->
+          <!-- Yards -->
+          <div class="yard yard-red" id="yard-red">
+            <div class="yard-inner">
+              <div class="yard-slot" id="yard-red-0"></div>
+              <div class="yard-slot" id="yard-red-1"></div>
+              <div class="yard-slot" id="yard-red-2"></div>
+              <div class="yard-slot" id="yard-red-3"></div>
+            </div>
+          </div>
+
+          <div class="yard yard-green" id="yard-green">
+            <div class="yard-inner">
+              <div class="yard-slot" id="yard-green-0"></div>
+              <div class="yard-slot" id="yard-green-1"></div>
+              <div class="yard-slot" id="yard-green-2"></div>
+              <div class="yard-slot" id="yard-green-3"></div>
+            </div>
+          </div>
+
+          <div class="yard yard-yellow" id="yard-yellow">
+            <div class="yard-inner">
+              <div class="yard-slot" id="yard-yellow-0"></div>
+              <div class="yard-slot" id="yard-yellow-1"></div>
+              <div class="yard-slot" id="yard-yellow-2"></div>
+              <div class="yard-slot" id="yard-yellow-3"></div>
+            </div>
+          </div>
+
+          <div class="yard yard-blue" id="yard-blue">
+            <div class="yard-inner">
+              <div class="yard-slot" id="yard-blue-0"></div>
+              <div class="yard-slot" id="yard-blue-1"></div>
+              <div class="yard-slot" id="yard-blue-2"></div>
+              <div class="yard-slot" id="yard-blue-3"></div>
+            </div>
+          </div>
+
+          <!-- Center Home Triangles -->
+          <div class="center-home" id="center-home">
+            <div class="triangle triangle-red"></div>
+            <div class="triangle triangle-green"></div>
+            <div class="triangle triangle-yellow"></div>
+            <div class="triangle triangle-blue"></div>
+            <div class="center-trophy" title="Winning Home">🏆</div>
+            <div class="home-tokens" id="home-tokens-container"></div>
+          </div>
+
+          <!-- 52 Track and Home Path Cells (injected / mapped in script.js) -->
+        </div>
+      </section>
+
+      <!-- Right Player Panel & Dice Controls -->
+      <aside class="players-panel right-panel">
+        <div class="player-card" id="card-green" data-color="green">
+          <div class="player-header">
+            <span class="color-dot green-dot"></span>
+            <span class="player-name">Green</span>
+            <button class="ai-toggle-btn" id="ai-toggle-green" title="Toggle AI / Human">🤖 Bot</button>
+          </div>
+          <div class="pawn-status">
+            <span>Yard: <b id="stat-green-yard">4</b></span>
+            <span>Track: <b id="stat-green-track">0</b></span>
+            <span>Home: <b id="stat-green-home">0</b></span>
+          </div>
+        </div>
+
+        <div class="player-card" id="card-yellow" data-color="yellow">
+          <div class="player-header">
+            <span class="color-dot yellow-dot"></span>
+            <span class="player-name">Yellow</span>
+            <button class="ai-toggle-btn" id="ai-toggle-yellow" title="Toggle AI / Human">🤖 Bot</button>
+          </div>
+          <div class="pawn-status">
+            <span>Yard: <b id="stat-yellow-yard">4</b></span>
+            <span>Track: <b id="stat-yellow-track">0</b></span>
+            <span>Home: <b id="stat-yellow-home">0</b></span>
+          </div>
+        </div>
+
+        <!-- Live Turn & Dice Action Box -->
+        <div class="turn-control-box">
+          <div class="turn-indicator" id="turnIndicator">
+            <span class="turn-color-pill red-bg" id="turnColorPill"></span>
+            <span class="turn-text" id="turnText">Red's Turn</span>
+          </div>
+
+          <!-- 3D Dice Display -->
+          <div class="dice-scene" id="diceScene" title="Click to Roll Dice">
+            <div class="dice" id="diceElement">
+              <div class="dice-face face-1"><span class="pip"></span></div>
+              <div class="dice-face face-2"><span class="pip"></span><span class="pip"></span></div>
+              <div class="dice-face face-3"><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+              <div class="dice-face face-4">
+                <div class="pip-column"><span class="pip"></span><span class="pip"></span></div>
+                <div class="pip-column"><span class="pip"></span><span class="pip"></span></div>
+              </div>
+              <div class="dice-face face-5">
+                <div class="pip-column"><span class="pip"></span><span class="pip"></span></div>
+                <div class="pip-column"><span class="pip"></span></div>
+                <div class="pip-column"><span class="pip"></span><span class="pip"></span></div>
+              </div>
+              <div class="dice-face face-6">
+                <div class="pip-column"><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+                <div class="pip-column"><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+              </div>
+            </div>
+          </div>
+
+          <button id="btnRollDice" class="btn btn-roll">
+            🎲 Roll Dice
+          </button>
+
+          <div class="turn-message" id="turnMessage">
+            Red: Roll the dice to start!
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Game Log Ticker -->
+    <footer class="game-footer">
+      <div class="log-title">📜 Game Log:</div>
+      <div class="log-ticker" id="logTicker">
+        <span class="log-entry">Welcome to Ludo Classic! Roll a 6 to move a pawn out of base.</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Rules Dialog Modal -->
+  <dialog id="rulesModal" class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📖 Ludo Classic - Rules & How to Play</h2>
+        <button id="btnCloseRules" class="btn-close" aria-label="Close Rules">&times;</button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li><strong>🎯 Objective:</strong> Be the first player to guide all your pawns from the Yard, clockwise around the track, and into the Center Home.</li>
+          <li><strong>🎲 Starting a Pawn:</strong> You must roll a <strong>6</strong> to move a pawn from your Yard onto your colored Start tile.</li>
+          <li><strong>⭐ Safe Zones:</strong> Starting tiles and tiles marked with a star (★) are Safe Zones. Pawns located on safe zones cannot be captured!</li>
+          <li><strong>⚔️ Capturing:</strong> When your pawn lands on a non-safe tile occupied by an opponent's pawn, the opponent's pawn is captured and sent back to their Yard. Capturing also rewards you with a <strong>Bonus Roll</strong>!</li>
+          <li><strong>🎉 Rolling a Six:</strong> Rolling a 6 grants you an <strong>extra roll</strong>!</li>
+          <li><strong>🏁 Home Stretch:</strong> Once around the board, your pawns enter your colored Home Column. An <strong>exact roll</strong> is needed to enter the Center Home Triangle.</li>
+          <li><strong>🤖 Play Modes:</strong> Play with 2, 3, or 4 players. You can toggle each player between <strong>Human</strong> and <strong>Bot AI</strong> anytime!</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button id="btnGotIt" class="btn btn-primary">Got it, Let's Play!</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Winner Celebration Modal -->
+  <dialog id="winnerModal" class="modal-dialog winner-modal">
+    <div class="modal-content text-center">
+      <div class="winner-trophy">🏆</div>
+      <h2 id="winnerText" class="winner-title">RED WINS!</h2>
+      <p id="winnerSubtitle" class="winner-subtitle">Congratulations on guiding all pawns safely home!</p>
+      <div class="modal-footer justify-center">
+        <button id="btnPlayAgain" class="btn btn-primary btn-large">🎉 Play Again</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
